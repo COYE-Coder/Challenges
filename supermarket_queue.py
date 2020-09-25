@@ -33,16 +33,15 @@ def queue_time(customers, n):
 
 
 	# First populate the tills  with the appropriate customers
-	tills = [[customers[x]] for x in range(n)]
+	tills = [customers[x] for x in range(n)]
 	tills_ = [[customers[x]] for x in range(n)]
 
 	# Remove those customers from queue
 	customers = customers[n:]
 	
 	def find_next_till(tills):
-		vals = [till[0] for till in tills]
-		min_val = min(vals)
-		return [i for i, x in enumerate(vals) if x == min_val]
+		min_val = min(tills)
+		return [i for i, x in enumerate(tills) if x == min_val]
 
 	# While any customers are still in the queue:
 	while customers:
@@ -54,26 +53,17 @@ def queue_time(customers, n):
 		for next_t, slow_t in zip(next_tills, slow_tills):
 
 			# Subtract the remaining "time"
-			tills = [[till_val - sum(tills[next_t]) for till_val in till] for till in tills]
+			tills = [till - tills[next_t] for till in tills]
+			# print(type(tills))
 
 			# Set the fastest till to be the next customer in line
-			tills[next_t] = [customers[0]]
+			tills[next_t] = customers[0]
 
 			# Store the history of each till in 'tills_'
 			tills_[next_t].append(customers.pop(0))
 
 
 	return max(sum(till) for till in tills_)
-
-
-
-
-
-
-
-
-
-
 
 
 cust = [1,2,3,4,5]
